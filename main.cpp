@@ -47,6 +47,10 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_STATGRAB_H
+# include <statgrab.h>
+#endif
+
 using namespace std;
 
 SignalResponder * pn_signalresponder = NULL;
@@ -110,6 +114,9 @@ int main(int argc, char ** argv)
    
 #ifdef HAVE_LIBKSTAT
 	if(-1 == kstat_init()) return 1;
+#endif
+#ifdef HAVE_LIBSTATGRAB
+	if(sg_init() < 0) return 1;
 #endif
 	
 	Daemon unixdaemon(cf_server_pid, cf_server_socket, cf_cache_dir);

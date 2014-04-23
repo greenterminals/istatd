@@ -95,6 +95,18 @@ use_disk=none
 
 dnl Specific tests for probe types
 
+AC_CHECK_LIB([statgrab],[sg_init],[
+AC_DEFINE_UNQUOTED([HAVE_LIBSTATGRAB],1,[Define if libstatgrab is available])
+have_statgrab=yes
+LIBS="$LIBS -lstatgrab"
+use_cpu=statgrab
+use_net=statgrab
+use_uptime=statgrab
+use_mem=statgrab
+use_load=statgrab
+use_swap=statgrab
+],[have_statgrab=no])
+
 AC_CHECK_LIB([kstat],[kstat_open],[
 AC_DEFINE_UNQUOTED([HAVE_LIBKSTAT],1,[Define if libkstat is available])
 have_kstat=yes
@@ -105,7 +117,7 @@ use_uptime=kstat
 use_mem=kstat
 ],[have_kstat=no])
 
-if test x"$have_kstat" = x"no" ; then
+if test x"$have_kstat" = x"no" && x"$have_statgrab" = x"no" ; then
 	AC_CHECK_LIB([kvm],[kvm_open],[
 	AC_DEFINE_UNQUOTED([HAVE_LIBKVM],1,[Define if libkvm is available])
 	LIBS="$LIBS -lkvm"
@@ -183,7 +195,7 @@ use_disk=statvfs
 ])
 
 # Checks for header files.
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h mntent.h netdb.h stdlib.h string.h paths.h sys/socket.h sys/statfs.h sys/statvfs.h sys/mnttab.h sys/loadavg.h kstat.h errno.h sys/sysinfo.h sys/processor.h sys/swap.h kvm.h alloca.h sys/resource.h netinet/in.h sys/sysctl.h sys/vmmeter.h sys/param.h sensors/sensors.h libperfstat.h])
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h mntent.h netdb.h stdlib.h string.h paths.h sys/socket.h sys/statfs.h sys/statvfs.h sys/mnttab.h sys/loadavg.h statgrab.h kstat.h errno.h sys/sysinfo.h sys/processor.h sys/swap.h kvm.h alloca.h sys/resource.h netinet/in.h sys/sysctl.h sys/vmmeter.h sys/param.h sensors/sensors.h libperfstat.h])
 
 # Mute warning in freebsd 6.0
 AC_CHECK_HEADERS([sys/mount.h], [], [], [#include <sys/param.h>])
@@ -233,6 +245,9 @@ case $use_cpu in
 	procfs)
 		AC_DEFINE_UNQUOTED([USE_CPU_PROCFS],1,[Use procfs to probe CPU usage])
 		;;
+	statgrab)
+		AC_DEFINE_UNQUOTED([USE_CPU_LIBSTATGRAB],1,[Use libstatgrab(3) to probe CPU usage])
+		;;
 	kstat)
 		AC_DEFINE_UNQUOTED([USE_CPU_KSTAT],1,[Use kstat(3) to probe CPU usage])
 		;;
@@ -270,6 +285,9 @@ case $use_mem in
 	procfs)
 		AC_DEFINE_UNQUOTED([USE_MEM_PROCFS],1,[Use procfs to probe memory usage])
 		;;
+	statgrab)
+		AC_DEFINE_UNQUOTED([USE_MEM_LIBSTATGRAB],1,[Use libstatgrab(3) to probe memory usage])
+		;;
 	kstat)
 		AC_DEFINE_UNQUOTED([USE_MEM_KSTAT],1,[Use kstat(3) to probe memory usage])
 		;;
@@ -293,6 +311,9 @@ case $use_swap in
 	swapctl)
 		AC_DEFINE_UNQUOTED([USE_SWAP_SWAPCTL],1,[Use swapctl(3) to probe swap])
 		;;
+	statgrab)
+		AC_DEFINE_UNQUOTED([USE_SWAP_LIBSTATGRAB],1,[Use libstatgrab(3) to probe swap])
+		;;
 	perfstat)
 		AC_DEFINE_UNQUOTED([USE_SWAP_PERFSTAT],1,[Use perfstat (AIX) to probe swap])
 		;;
@@ -309,6 +330,9 @@ AC_MSG_CHECKING([uptime probe type])
 case $use_uptime in
 	procfs)
 		AC_DEFINE_UNQUOTED([USE_UPTIME_PROCFS],1,[Use procfs to probe uptime])
+		;;
+	statgrab)
+		AC_DEFINE_UNQUOTED([USE_UPTIME_LIBSTATGRAB],1,[Use libstatgrab(3) to probe uptime])
 		;;
 	kstat)
 		AC_DEFINE_UNQUOTED([USE_UPTIME_KSTAT],1,[Use kstat(3) to probe uptime])
@@ -332,6 +356,9 @@ AC_MSG_CHECKING([network activity probe type])
 case $use_net in
 	procfs)
 		AC_DEFINE_UNQUOTED([USE_NET_PROCFS],1,[Use procfs to probe network activity])
+		;;
+	statgrab)
+		AC_DEFINE_UNQUOTED([USE_NET_LIBSTATGRAB],1,[Use libstatgrab(3) to probe network activity])
 		;;
 	kstat)
 		AC_DEFINE_UNQUOTED([USE_NET_KSTAT],1,[Use kstat(3) to probe network activity])
