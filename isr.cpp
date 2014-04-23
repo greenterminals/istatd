@@ -201,7 +201,7 @@ string isr_disk_data(vector<disk_info> * _disks, int _init, const string cf_disk
 		else
 			disk_uuid = (*cur).device;
 		
-		temp << "<d n=\"" << disk_label << "\" uuid=\"" << disk_uuid << "\" f=\"" << (*cur).history.front().f / 1000 << "\" p=\"" << (*cur).history.front().p << "\"></d>";
+		temp << "<d n=\"" << disk_label << "\" uuid=\"" << disk_uuid << "\" f=\"" << (*cur).history.front().f / 1000 << "\" u=\"" << (*cur).history.front().u / 1000 << "\" p=\"" << (*cur).history.front().p << "\"></d>";
 	}
 	
 	temp << "</DISKS>";
