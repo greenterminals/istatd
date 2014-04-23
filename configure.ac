@@ -173,7 +173,7 @@ have_sysctl=yes
 dnl Try to use sysctl on freebsd if there's no CLOCK_UPTIME
 if test x"$use_uptime" = x"none" ; then
 	case "$host_os" in
-		freebsd*)
+		freebsd*|openbsd*)
 			if test x"$have_sysctl" = x"yes" ; then
 				use_uptime=sysctl
 			fi
