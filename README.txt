@@ -1,6 +1,6 @@
 About istatd
 
-istatd is a daemon serving statistics to your iStat iPhone application from Linux, Solaris & FreeBSD. istatd collects data such as CPU, memory, network and disk usage and keeps the history. Once connecting from the iPhone and entering the lock code this data will be sent to the iPhone and shown in fancy graphs.
+istatd is a daemon serving statistics to your iStat iPhone application from Linux, Solaris, FreeBSD, and OpenBSD. istatd collects data such as CPU, memory, network and disk usage and keeps the history. Once connecting from the iPhone and entering the lock code this data will be sent to the iPhone and shown in fancy graphs.
 
 What is iStat for iPhone?
 
