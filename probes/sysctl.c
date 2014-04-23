@@ -51,6 +51,7 @@
 
 #ifdef HAVE_SYS_SYSCTL_H
 # include <sys/types.h>
+# include <sys/param.h>
 # include <sys/sysctl.h>
 #endif
 

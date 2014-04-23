@@ -39,6 +39,7 @@
 #include <string.h>
 
 #ifdef HAVE_SYS_SWAP_H
+# include <sys/param.h>
 # include <sys/swap.h>
 #endif
 
